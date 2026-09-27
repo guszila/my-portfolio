@@ -1,6 +1,5 @@
 import React from "react";
 import { TruthfulMetric } from "@/types/developer";
-import { Badge } from "@/components/ui/Badge";
 
 interface MetricCardProps {
   metric: TruthfulMetric;
@@ -8,23 +7,23 @@ interface MetricCardProps {
 
 export function MetricCard({ metric }: MetricCardProps) {
   return (
-    <div className="p-4 rounded-lg bg-[#0e1422]/70 workbench-border workbench-border-hover transition-all flex flex-col justify-between">
-      <div className="flex items-center justify-between gap-2 mb-2">
-        <span className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">
+    <div className="py-4 px-1 border-t border-border/80 flex flex-col justify-between">
+      <div className="flex items-baseline justify-between mb-2">
+        <span className="text-[10px] font-mono text-muted/70 tracking-widest uppercase">
           {metric.label}
         </span>
         {metric.badge && (
-          <Badge variant="outline" size="sm">
-            {metric.badge}
-          </Badge>
+          <span className="text-[9px] font-mono text-accent tracking-widest uppercase">
+            [{metric.badge}]
+          </span>
         )}
       </div>
 
-      <div className="text-base font-semibold text-white tracking-tight font-mono mb-1">
+      <div className="text-sm sm:text-base font-mono font-medium text-foreground tracking-tight mb-1.5">
         {metric.value}
       </div>
 
-      <p className="text-xs text-slate-400 font-sans leading-relaxed">
+      <p className="text-xs text-muted font-sans leading-relaxed">
         {metric.detail}
       </p>
     </div>

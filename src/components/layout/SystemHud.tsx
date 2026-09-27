@@ -28,47 +28,47 @@ export function SystemHud() {
   return (
     <aside
       aria-label="System status bar"
-      className="w-full bg-[#070a11] border-b border-white/[0.07] text-[11px] font-mono text-slate-400 select-none"
+      className="w-full bg-surface-secondary/80 border-b border-border text-[11px] font-mono text-muted select-none transition-colors"
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-8 flex items-center justify-between">
         {/* Left: Truthful System Status */}
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 text-slate-300">
+          <div className="flex items-center gap-1.5 text-foreground">
             <span
-              className="inline-block w-2 h-2 rounded-full bg-emerald-500 animate-pulse"
+              className="inline-block w-2 h-2 rounded-full bg-accent animate-pulse"
               aria-hidden="true"
             />
-            <span className="font-semibold tracking-wider text-slate-200">
+            <span className="font-semibold tracking-wider text-foreground">
               STATUS:
             </span>
-            <span className="text-emerald-400">READY</span>
+            <span className="text-accent font-medium">READY</span>
           </div>
 
-          <span className="text-white/20 hidden sm:inline" aria-hidden="true">
+          <span className="text-border hidden sm:inline" aria-hidden="true">
             |
           </span>
 
-          <span className="hidden sm:inline-flex items-center gap-1 text-slate-400">
-            <ShieldCheck className="w-3 h-3 text-cyan-400" aria-hidden="true" />
+          <span className="hidden sm:inline-flex items-center gap-1 text-muted">
+            <ShieldCheck className="w-3 h-3 text-accent-cyan" aria-hidden="true" />
             <span>PORTFOLIO OS</span>
           </span>
         </div>
 
         {/* Center: Live Time */}
-        <div className="text-slate-400 flex items-center gap-1.5">
-          <span className="text-slate-500 text-[10px]">UTC/LOCAL:</span>
-          <span className="text-slate-200 font-medium tabular-nums">
+        <div className="text-muted flex items-center gap-1.5">
+          <span className="opacity-60 text-[10px]">UTC/LOCAL:</span>
+          <span className="text-foreground font-medium tabular-nums">
             {timeString || "--:--:--"}
           </span>
         </div>
 
         {/* Right: Navigation mode */}
         <div className="flex items-center gap-2">
-          <span className="hidden md:inline-flex items-center gap-1 text-slate-400 text-[10px]">
-            <Terminal className="w-3 h-3 text-slate-500" aria-hidden="true" />
+          <span className="hidden md:inline-flex items-center gap-1 text-muted text-[10px]">
+            <Terminal className="w-3 h-3 opacity-60" aria-hidden="true" />
             <span>GUI NAV ACTIVE</span>
           </span>
-          <span className="text-[10px] px-1.5 py-0.5 rounded bg-white/[0.05] border border-white/10 text-slate-400">
+          <span className="text-[10px] px-1.5 py-0.5 rounded bg-surface border border-border text-muted">
             v1.0
           </span>
         </div>

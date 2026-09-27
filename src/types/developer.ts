@@ -19,27 +19,42 @@ export interface CoreFocusArea {
   description: string;
 }
 
+export interface TechnologyItem {
+  name: string;
+  detail: string;
+}
+
+export interface TechnologyGroup {
+  id: "portfolio" | "personal";
+  label: string;
+  summary: string;
+  technologies: TechnologyItem[];
+}
+
+export interface FeaturedProject {
+  id: string;
+  name: string;
+  domain: string;
+  summary: string;
+  modules: string[];
+  technologies: string[];
+  architecture: string[];
+  targetHref: string;
+}
+
 export interface DeveloperProfile {
   name: string;
+  nickname: string;
   role: string;
-  handle: string;
-  location: string;
-  status: {
-    indicator: "operational" | "available" | "active";
-    label: string;
-  };
+  education: string;
+  university: string;
+  interest: string;
   statement: string;
   substatement: string;
   focusAreas: CoreFocusArea[];
   truthfulMetrics: TruthfulMetric[];
-  primaryProjectTeaser: {
-    id: string;
-    name: string;
-    domain: string;
-    status: string;
-    summary: string;
-    targetHref: string;
-  };
+  technologyGroups: TechnologyGroup[];
+  featuredProjects: FeaturedProject[];
   navigation: NavigationItem[];
   socialLinks: {
     name: string;

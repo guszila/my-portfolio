@@ -1,114 +1,129 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import {
-  Home,
-  FolderGit2,
-  Cpu,
-  Layers,
-  User,
-  Mail,
-} from "lucide-react";
+import React from "react";
+import { Terminal } from "lucide-react";
+import { useActiveSection } from "@/components/animation/useActiveSection";
+import { useTerminal } from "@/components/terminal/TerminalContext";
 
 interface DockItem {
   id: string;
+  sectionId: string;
+  num: string;
   label: string;
-  href: string;
-  icon: React.ReactNode;
+  shortLabel: string;
 }
 
 const dockItems: DockItem[] = [
   {
     id: "dock-home",
-    label: "Home",
-    href: "#home",
-    icon: <Home className="w-4 h-4" aria-hidden="true" />,
-  },
-  {
-    id: "dock-projects",
-    label: "Projects",
-    href: "#projects",
-    icon: <FolderGit2 className="w-4 h-4" aria-hidden="true" />,
-  },
-  {
-    id: "dock-architecture",
-    label: "Architecture",
-    href: "#architecture",
-    icon: <Cpu className="w-4 h-4" aria-hidden="true" />,
-  },
-  {
-    id: "dock-skills",
-    label: "Skills",
-    href: "#skills",
-    icon: <Layers className="w-4 h-4" aria-hidden="true" />,
+    sectionId: "home",
+    num: "01",
+    label: "INDEX",
+    shortLabel: "01",
   },
   {
     id: "dock-about",
-    label: "About",
-    href: "#about",
-    icon: <User className="w-4 h-4" aria-hidden="true" />,
+    sectionId: "about",
+    num: "02",
+    label: "ABOUT",
+    shortLabel: "02",
+  },
+  {
+    id: "dock-skills",
+    sectionId: "skills",
+    num: "03",
+    label: "STACK",
+    shortLabel: "03",
+  },
+  {
+    id: "dock-projects",
+    sectionId: "projects",
+    num: "04",
+    label: "WORK",
+    shortLabel: "04",
+  },
+  {
+    id: "dock-architecture",
+    sectionId: "architecture",
+    num: "05",
+    label: "ARCHITECTURE",
+    shortLabel: "05",
   },
   {
     id: "dock-contact",
-    label: "Contact",
-    href: "#contact",
-    icon: <Mail className="w-4 h-4" aria-hidden="true" />,
+    sectionId: "contact",
+    num: "06",
+    label: "CONTACT",
+    shortLabel: "06",
   },
 ];
 
+const sectionIds = dockItems.map((item) => item.sectionId);
+
 export function NavDock() {
-  const [activeHash, setActiveHash] = useState<string>("#home");
-
-  useEffect(() => {
-    const handleHashChange = () => {
-      if (window.location.hash) {
-        setActiveHash(window.location.hash);
-      }
-    };
-
-    handleHashChange();
-    window.addEventListener("hashchange", handleHashChange);
-    return () => window.removeEventListener("hashchange", handleHashChange);
-  }, []);
+  const { toggle: toggleTerminal } = useTerminal();
+  const { activeSection, scrollToSection } = useActiveSection({
+    sectionIds,
+    defaultSection: "home",
+    rootMargin: "-20% 0px -55% 0px",
+  });
 
   return (
     <nav
-      aria-label="Quick navigation dock"
-      className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40"
+      aria-label="Editorial quick index"
+      className="fixed bottom-5 left-1/2 -translate-x-1/2 z-40 max-w-[calc(100vw-2rem)]"
     >
-      <div className="flex items-center gap-1 sm:gap-2 px-3 py-2 rounded-xl bg-[#0d131f]/95 backdrop-blur-md border border-white/[0.12] shadow-2xl shadow-black/80">
+      <div className="flex items-center gap-0.5 sm:gap-1 px-2 sm:px-3 py-1.5 rounded-lg bg-surface/95 border border-border transition-colors">
         {dockItems.map((item) => {
-          const isActive = activeHash === item.href;
+          const isActive = activeSection === item.sectionId;
+
           return (
-            <Link
+            <button
               key={item.id}
-              href={item.href}
-              onClick={() => setActiveHash(item.href)}
+              type="button"
+              onClick={() => scrollToSection(item.sectionId)}
               aria-label={`Jump to ${item.label}`}
-              className={`relative group flex items-center justify-center w-10 h-10 sm:w-11 sm:h-11 rounded-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 ${
+              className={`relative px-2 sm:px-2.5 py-1 rounded transition-colors font-mono text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground cursor-pointer ${
                 isActive
-                  ? "bg-emerald-500/15 text-emerald-400 border border-emerald-500/40"
-                  : "text-slate-400 hover:text-slate-100 hover:bg-white/[0.06] border border-transparent"
+                  ? "text-foreground font-semibold"
+                  : "text-muted hover:text-foreground hover:bg-surface-secondary/60"
               }`}
             >
-              {item.icon}
-
-              {/* Tooltip Label */}
-              <span className="absolute -top-9 left-1/2 -translate-x-1/2 px-2 py-0.5 rounded bg-slate-900 border border-white/10 text-[11px] font-mono text-slate-200 whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity">
-                {item.label}
-              </span>
-
-              {/* Active Pip */}
+              {/* Active Indicator Underline */}
               {isActive && (
                 <span
-                  className="absolute bottom-1 w-1 h-1 rounded-full bg-emerald-400"
+                  className="absolute bottom-0 left-1.5 right-1.5 h-0.5 bg-accent"
                   aria-hidden="true"
                 />
               )}
-            </Link>
+
+              {/* Desktop Full Label */}
+              <span className="hidden lg:inline tracking-wider uppercase text-[11px]">
+                <span className="text-muted/60 mr-1 text-[10px]">{item.num}</span>
+                <span>{item.label}</span>
+              </span>
+
+              {/* Tablet/Mobile Short Label */}
+              <span className="lg:hidden text-[11px] tracking-widest uppercase">
+                {item.shortLabel}
+              </span>
+            </button>
           );
         })}
+
+        {/* Hairline Divider */}
+        <span className="w-px h-4 bg-border mx-1" aria-hidden="true" />
+
+        {/* Terminal Trigger */}
+        <button
+          type="button"
+          onClick={toggleTerminal}
+          aria-label="Open Developer Terminal (Ctrl+K or `)"
+          className="flex items-center gap-1.5 px-2 py-1 rounded text-muted hover:text-foreground hover:bg-surface-secondary/60 transition-colors font-mono text-xs focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground cursor-pointer"
+        >
+          <Terminal className="w-3.5 h-3.5 opacity-80" aria-hidden="true" />
+          <span className="hidden sm:inline text-[10px] text-muted/80 tracking-wider">⌘K</span>
+        </button>
       </div>
     </nav>
   );

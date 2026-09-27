@@ -31,23 +31,23 @@ export function Button({
   ...rest
 }: ButtonProps) {
   const baseStyles =
-    "inline-flex items-center justify-center font-mono font-medium rounded transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[#090d16] disabled:opacity-50 disabled:pointer-events-none cursor-pointer";
+    "inline-flex items-center justify-center font-mono rounded-md transition-all focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-foreground disabled:opacity-40 disabled:pointer-events-none cursor-pointer select-none tracking-wider uppercase";
 
   const sizeStyles = {
-    sm: "text-xs px-3 py-1.5 gap-1.5",
-    md: "text-xs md:text-sm px-4 py-2 gap-2",
-    lg: "text-sm md:text-base px-5 py-2.5 gap-2.5",
+    sm: "text-[11px] px-3 py-1.5 gap-1.5",
+    md: "text-xs px-4 py-2 gap-2",
+    lg: "text-xs md:text-sm px-5 py-2.5 gap-2.5",
   };
 
   const variantStyles = {
     primary:
-      "bg-emerald-500 text-slate-950 hover:bg-emerald-400 font-semibold shadow-sm",
+      "bg-foreground text-background hover:opacity-90 font-medium border border-foreground",
     secondary:
-      "bg-slate-800/90 text-slate-100 hover:bg-slate-750 border border-slate-700 hover:border-slate-600",
+      "bg-surface-secondary text-foreground hover:bg-border/50 border border-border text-muted hover:text-foreground",
     outline:
-      "bg-transparent text-slate-200 border border-white/15 hover:border-white/30 hover:bg-white/[0.04]",
+      "bg-transparent text-foreground border border-border hover:border-foreground",
     ghost:
-      "bg-transparent text-slate-400 hover:text-slate-100 hover:bg-white/[0.04]",
+      "bg-transparent text-muted hover:text-foreground hover:bg-surface-secondary/40",
   };
 
   const combinedClasses = `${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`;

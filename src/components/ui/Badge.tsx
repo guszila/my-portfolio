@@ -16,31 +16,31 @@ export function Badge({
   icon,
 }: BadgeProps) {
   const baseStyles =
-    "inline-flex items-center gap-1.5 font-mono font-medium rounded tracking-wide uppercase transition-colors";
+    "inline-flex items-center gap-1.5 font-mono tracking-widest uppercase transition-colors select-none rounded";
 
   const sizeStyles = {
     sm: "text-[10px] px-2 py-0.5",
-    md: "text-xs px-2.5 py-1",
+    md: "text-[11px] px-2.5 py-1",
   };
 
   const variantStyles = {
     default:
-      "bg-slate-800/80 text-slate-300 border border-slate-700/60",
+      "bg-surface-secondary/70 text-foreground border border-border/80",
     emerald:
-      "bg-emerald-950/60 text-emerald-400 border border-emerald-500/30",
+      "bg-accent-bg text-accent border border-accent/25",
     cyan:
-      "bg-cyan-950/60 text-cyan-400 border border-cyan-500/30",
+      "bg-surface-secondary text-foreground border border-border/80",
     indigo:
-      "bg-indigo-950/60 text-indigo-400 border border-indigo-500/30",
+      "bg-surface-secondary text-foreground border border-border/80",
     outline:
-      "bg-transparent text-slate-400 border border-white/10",
+      "bg-transparent text-muted/80 border border-border/60",
   };
 
   return (
     <span
       className={`${baseStyles} ${sizeStyles[size]} ${variantStyles[variant]} ${className}`}
     >
-      {icon && <span className="shrink-0">{icon}</span>}
+      {icon && <span className="shrink-0 opacity-70">{icon}</span>}
       <span>{children}</span>
     </span>
   );

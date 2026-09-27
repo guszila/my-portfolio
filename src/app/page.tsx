@@ -1,351 +1,155 @@
-import React from "react";
+"use client";
+
+import React, { useRef } from "react";
+import { motion, useScroll, useSpring, useTransform, useReducedMotion } from "motion/react";
 import { Hero } from "@/components/hero/Hero";
+import { AboutStory } from "@/components/story/AboutStory";
+import { TechStackStory } from "@/components/story/TechStackStory";
+import { ProjectsStory } from "@/components/story/ProjectsStory";
+import { CaseStudyStory } from "@/components/story/CaseStudyStory";
+import { ArchitectureStory } from "@/components/story/ArchitectureStory";
 import { developerData } from "@/data/developer";
-import { Badge } from "@/components/ui/Badge";
-import { Button } from "@/components/ui/Button";
-import {
-  FolderGit2,
-  Cpu,
-  Layers,
-  User,
-  Mail,
-  ExternalLink,
-  Code,
-  Database,
-  Workflow,
-  CheckCircle2,
-} from "lucide-react";
+import { ScrollReveal } from "@/components/animation/ScrollReveal";
+import { StaggerContainer, StaggerItem } from "@/components/animation/StaggerContainer";
 
 export default function Home() {
-  const { socialLinks, primaryProjectTeaser } = developerData;
+  const { name, nickname, role, socialLinks } = developerData;
+  const darkChapterRef = useRef<HTMLDivElement>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  // Environmental scroll tracking across the dark chapter (Stack → Architecture)
+  const { scrollYProgress: darkProgress } = useScroll({
+    target: darkChapterRef,
+    offset: ["start end", "end start"],
+  });
+
+  // Neutral crossfade: off-white → neutral → charcoal → near-black
+  const rawDarkOpacity = useTransform(
+    darkProgress,
+    [0.02, 0.16, 0.86, 0.98],
+    [0, 1, 1, 0]
+  );
+
+  const smoothDarkOpacity = useSpring(rawDarkOpacity, {
+    stiffness: 80,
+    damping: 26,
+    mass: 0.45,
+  });
+
+  const darkOpacity = shouldReduceMotion ? rawDarkOpacity : smoothDarkOpacity;
 
   return (
-    <main className="flex-1 flex flex-col">
-      {/* 1. Hero Section */}
+    <main className="flex-1 flex flex-col transition-colors overflow-x-clip relative">
+      {/* Two Fixed Neutral Background Layers for Invisible Environmental Crossfade */}
+      <div
+        className="fixed inset-0 pointer-events-none -z-30 bg-[#faf9f6] dark:bg-[#0e0e10] transition-colors"
+        aria-hidden="true"
+      />
+      <motion.div
+        style={{ opacity: darkOpacity }}
+        className="fixed inset-0 pointer-events-none -z-20 bg-[#0e0e10]"
+        aria-hidden="true"
+      />
+
+      {/* 1. Hero Section (#home) — Light Chapter */}
       <Hero />
 
-      {/* 2. Projects Anchor Section (Phase 1 Baseline & Phase 2/3 Roadmap Preview) */}
-      <section
-        id="projects"
-        aria-label="Projects overview"
-        className="w-full py-16 border-b border-white/[0.08] bg-[#080c14]"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-            <div>
-              <div className="flex items-center gap-2 font-mono text-xs text-slate-400 mb-1">
-                <FolderGit2 className="w-4 h-4 text-emerald-400" aria-hidden="true" />
-                <span>SECTION: PROJECTS</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white font-mono tracking-tight">
-                Featured Engineering Projects
-              </h2>
-            </div>
-            <Badge variant="cyan" size="sm">
-              Phase 2 / Phase 3 Milestone
-            </Badge>
-          </div>
+      {/* 2. Editorial About Story (#about) — Light Chapter */}
+      <AboutStory />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {/* Primary Featured Project Card */}
-            <div className="p-6 rounded-xl bg-[#0d1320] workbench-border flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <Badge variant="emerald" size="sm">
-                    Flagship Project
-                  </Badge>
-                  <span className="text-xs font-mono text-slate-500">
-                    Production System
-                  </span>
-                </div>
-                <h3 className="text-xl font-bold text-white font-mono mb-2">
-                  {primaryProjectTeaser.name}
-                </h3>
-                <p className="text-sm text-slate-300 font-sans leading-relaxed mb-4">
-                  {primaryProjectTeaser.summary}
-                </p>
-                <div className="flex flex-wrap gap-2 text-xs font-mono text-slate-400 mb-4">
-                  <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/10">
-                    WIP & Output
-                  </span>
-                  <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/10">
-                    Capacity Engine
-                  </span>
-                  <span className="px-2 py-0.5 rounded bg-white/[0.04] border border-white/10">
-                    Operations Dashboard
-                  </span>
-                </div>
-              </div>
-              <div className="pt-4 border-t border-white/[0.06] flex items-center justify-between">
-                <span className="text-xs font-mono text-emerald-400">
-                  Case study deep-dive in Phase 3
-                </span>
-                <Button href="#architecture" variant="outline" size="sm">
-                  View Architecture
-                </Button>
-              </div>
-            </div>
+      {/* Dark Story Chapter: Stack → Projects → Case Study → Architecture */}
+      <div ref={darkChapterRef} className="dark relative text-foreground">
+        {/* 3. Tech Stack Presentation Slides (#skills) */}
+        <TechStackStory />
 
-            {/* Modular Full Stack Projects Teaser */}
-            <div className="p-6 rounded-xl bg-[#0a0e18] workbench-border flex flex-col justify-between border-dashed">
-              <div>
-                <div className="flex items-center justify-between gap-2 mb-3">
-                  <Badge variant="outline" size="sm">
-                    Engineering Portfolio
-                  </Badge>
-                  <span className="text-xs font-mono text-slate-500">
-                    Upcoming Modules
-                  </span>
-                </div>
-                <h3 className="text-xl font-bold text-white font-mono mb-2">
-                  Interactive Project Explorer
-                </h3>
-                <p className="text-sm text-slate-400 font-sans leading-relaxed mb-4">
-                  Detailed technical case studies containing problem statements, domain models, database architecture, trade-offs, and live visualizations.
-                </p>
-                <div className="space-y-2 text-xs font-mono text-slate-400">
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Real-world production engineering case studies</span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-                    <span>Interactive technology filtering & inspection</span>
-                  </div>
-                </div>
-              </div>
-              <div className="pt-4 border-t border-white/[0.06]">
-                <span className="text-xs font-mono text-slate-500">
-                  Scheduled for Phase 2 Implementation
-                </span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+        {/* 4. Projects Presentation Showcase (#projects) */}
+        <ProjectsStory />
 
-      {/* 3. Architecture Anchor Section */}
-      <section
-        id="architecture"
-        aria-label="System architecture overview"
-        className="w-full py-16 border-b border-white/[0.08] bg-[#090d16]"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-            <div>
-              <div className="flex items-center gap-2 font-mono text-xs text-slate-400 mb-1">
-                <Cpu className="w-4 h-4 text-indigo-400" aria-hidden="true" />
-                <span>SECTION: ARCHITECTURE</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white font-mono tracking-tight">
-                Planning System Architecture
-              </h2>
-            </div>
-            <Badge variant="indigo" size="sm">
-              Interactive Node Graph (Phase 3)
-            </Badge>
-          </div>
+        {/* 5. Planning System Case Study Story (#case-study) */}
+        <CaseStudyStory />
 
-          <div className="p-6 sm:p-8 rounded-xl bg-[#0b101c] workbench-border">
-            <div className="max-w-3xl mb-6">
-              <p className="text-sm sm:text-base text-slate-300 font-sans leading-relaxed">
-                The Planning System architecture decouples operational data ingestion, relational persistence, and dynamic capacity calculation from high-density dashboard visualization.
-              </p>
-            </div>
+        {/* 6. Progressive System Architecture (#architecture) */}
+        <ArchitectureStory />
+      </div>
 
-            {/* Architecture Tiers Blueprint */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4 border-t border-white/[0.08]">
-              <div className="p-4 rounded-lg bg-black/30 border border-white/[0.07]">
-                <div className="flex items-center gap-2 text-indigo-400 font-mono text-xs font-semibold mb-2">
-                  <Workflow className="w-4 h-4" />
-                  <span>01. Client Interface</span>
-                </div>
-                <p className="text-xs text-slate-400 font-sans">
-                  Next.js App Router, React, and Motion for fast, responsive planning workflows.
-                </p>
-              </div>
-
-              <div className="p-4 rounded-lg bg-black/30 border border-white/[0.07]">
-                <div className="flex items-center gap-2 text-indigo-400 font-mono text-xs font-semibold mb-2">
-                  <Code className="w-4 h-4" />
-                  <span>02. Application Layer</span>
-                </div>
-                <p className="text-xs text-slate-400 font-sans">
-                  Type-safe business logic, capacity engines, and server route handlers.
-                </p>
-              </div>
-
-              <div className="p-4 rounded-lg bg-black/30 border border-white/[0.07]">
-                <div className="flex items-center gap-2 text-indigo-400 font-mono text-xs font-semibold mb-2">
-                  <Database className="w-4 h-4" />
-                  <span>03. Relational Storage</span>
-                </div>
-                <p className="text-xs text-slate-400 font-sans">
-                  Structured schema preserving data integrity across stages and work orders.
-                </p>
-              </div>
-
-              <div className="p-4 rounded-lg bg-black/30 border border-white/[0.07]">
-                <div className="flex items-center gap-2 text-indigo-400 font-mono text-xs font-semibold mb-2">
-                  <Cpu className="w-4 h-4" />
-                  <span>04. Analytics Engine</span>
-                </div>
-                <p className="text-xs text-slate-400 font-sans">
-                  Aggregation pipeline calculating real-time productivity curves and output metrics.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 4. Skills Anchor Section */}
-      <section
-        id="skills"
-        aria-label="Technologies and skills"
-        className="w-full py-16 border-b border-white/[0.08] bg-[#080c14]"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
-            <div>
-              <div className="flex items-center gap-2 font-mono text-xs text-slate-400 mb-1">
-                <Layers className="w-4 h-4 text-emerald-400" aria-hidden="true" />
-                <span>SECTION: TECHNOLOGIES</span>
-              </div>
-              <h2 className="text-2xl sm:text-3xl font-bold text-white font-mono tracking-tight">
-                Technical Stack & Capabilities
-              </h2>
-            </div>
-            <Badge variant="emerald" size="sm">
-              Interactive Matrix (Phase 2)
-            </Badge>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="p-5 rounded-lg bg-[#0e1422] workbench-border">
-              <span className="text-xs font-mono text-emerald-400 uppercase tracking-wider block mb-3 font-semibold">
-                Frontend Architecture
-              </span>
-              <div className="flex flex-wrap gap-2 text-xs font-mono text-slate-300">
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] border border-white/10">Next.js</span>
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] border border-white/10">React</span>
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] border border-white/10">TypeScript</span>
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] border border-white/10">Tailwind CSS</span>
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] border border-white/10">Motion</span>
-              </div>
-            </div>
-
-            <div className="p-5 rounded-lg bg-[#0e1422] workbench-border">
-              <span className="text-xs font-mono text-cyan-400 uppercase tracking-wider block mb-3 font-semibold">
-                Backend & Systems
-              </span>
-              <div className="flex flex-wrap gap-2 text-xs font-mono text-slate-300">
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] border border-white/10">Node.js</span>
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] border border-white/10">PostgreSQL</span>
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] border border-white/10">REST & Route Handlers</span>
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] border border-white/10">Relational Modeling</span>
-              </div>
-            </div>
-
-            <div className="p-5 rounded-lg bg-[#0e1422] workbench-border">
-              <span className="text-xs font-mono text-slate-400 uppercase tracking-wider block mb-3 font-semibold">
-                Engineering Practices
-              </span>
-              <div className="flex flex-wrap gap-2 text-xs font-mono text-slate-300">
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] border border-white/10">Git & Version Control</span>
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] border border-white/10">Docker & Containers</span>
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] border border-white/10">CI/CD Pipelines</span>
-                <span className="px-2.5 py-1 rounded bg-white/[0.05] border border-white/10">Type Safety</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. About Anchor Section */}
-      <section
-        id="about"
-        aria-label="About developer"
-        className="w-full py-16 border-b border-white/[0.08] bg-[#090d16]"
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2 font-mono text-xs text-slate-400 mb-1">
-            <User className="w-4 h-4 text-emerald-400" aria-hidden="true" />
-            <span>SECTION: PROFILE</span>
-          </div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white font-mono tracking-tight mb-8">
-            Engineering Mindset
-          </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div className="p-6 rounded-xl bg-[#0b101b] workbench-border">
-              <div className="text-emerald-400 font-mono text-xs mb-2">PRINCIPLE 01</div>
-              <h3 className="text-base font-bold text-white font-mono mb-2">
-                Pragmatic Architecture
-              </h3>
-              <p className="text-xs text-slate-400 font-sans leading-relaxed">
-                Choose technologies for maintainability, reliability, and clear ROI over hype. Build systems that are easy to reason about and evolve.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-xl bg-[#0b101b] workbench-border">
-              <div className="text-emerald-400 font-mono text-xs mb-2">PRINCIPLE 02</div>
-              <h3 className="text-base font-bold text-white font-mono mb-2">
-                Data Integrity First
-              </h3>
-              <p className="text-xs text-slate-400 font-sans leading-relaxed">
-                Workflows collapse without reliable data foundations. Strong typing and relational constraints prevent silent runtime failures.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-xl bg-[#0b101b] workbench-border">
-              <div className="text-emerald-400 font-mono text-xs mb-2">PRINCIPLE 03</div>
-              <h3 className="text-base font-bold text-white font-mono mb-2">
-                Ergonomics & Performance
-              </h3>
-              <p className="text-xs text-slate-400 font-sans leading-relaxed">
-                Great software feels responsive and alive. High-density interfaces should minimize repetitive clicks and respect user time.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. Contact Anchor Section */}
-      <section
+      {/* 7. Contact Section (#contact) — Light Chapter Return */}
+      <ScrollReveal
+        as="section"
         id="contact"
         aria-label="Contact channels"
-        className="w-full py-16 bg-[#080c14]"
+        className="w-full py-24 bg-transparent text-foreground transition-colors border-t border-border"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-2 font-mono text-xs text-slate-400 mb-1">
-            <Mail className="w-4 h-4 text-emerald-400" aria-hidden="true" />
-            <span>SECTION: CONTACT</span>
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+          {/* Editorial Section Header */}
+          <div className="flex items-baseline justify-between gap-4 border-b border-border pb-4 mb-8">
+            <div className="flex items-center gap-2">
+              <span className="text-muted font-mono text-xs">05</span>
+              <span className="text-foreground font-sans font-medium text-xs tracking-widest uppercase">
+                CONTACT
+              </span>
+            </div>
+            <span className="text-xs font-mono text-muted tracking-wider uppercase">VERIFIED CHANNELS</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-bold text-white font-mono tracking-tight mb-4">
-            Connect & Dispatch
-          </h2>
-          <p className="text-sm text-slate-300 font-sans max-w-xl mb-8">
-            Available for full-stack engineering roles, technical architecture consultations, and system design discussions.
-          </p>
 
-          <div className="flex flex-wrap gap-4">
-            {socialLinks.map((link) => (
-              <a
-                key={link.name}
-                href={link.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-5 py-3 rounded-lg bg-[#0e1422] hover:bg-[#141b2e] workbench-border text-xs font-mono text-slate-200 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400"
-              >
-                <span>{link.name}</span>
-                <span className="text-slate-500 text-[11px]">({link.handle})</span>
-                <ExternalLink className="w-3.5 h-3.5 text-slate-400" aria-hidden="true" />
-              </a>
-            ))}
+          <div className="max-w-3xl mb-10">
+            <h2 className="text-3xl sm:text-5xl md:text-6xl font-sans font-light text-foreground tracking-tight mb-4">
+              {name.toUpperCase()}
+            </h2>
+            <div className="flex flex-wrap items-center gap-3 text-xs sm:text-sm font-mono text-muted uppercase tracking-wider">
+              <span className="text-foreground font-medium">{nickname}</span>
+              <span className="opacity-40">•</span>
+              <span>{role}</span>
+              <span className="opacity-40">•</span>
+              <span>SURANAREE UNIVERSITY OF TECHNOLOGY</span>
+            </div>
+          </div>
+
+          {socialLinks.length > 0 && (
+            <div className="border-t border-border pt-6">
+              <span className="text-[11px] font-mono uppercase tracking-widest text-muted block mb-4 font-medium">
+                Verified Communication Channels
+              </span>
+              <StaggerContainer staggerDelay={0.05} className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {socialLinks.map((link) => (
+                  <StaggerItem key={link.name}>
+                    <a
+                      href={link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="group flex items-baseline justify-between p-4 rounded-md border border-border bg-surface/60 hover:bg-surface-secondary/80 text-foreground transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
+                    >
+                      <div>
+                        <span className="text-xs font-mono font-bold tracking-wider block group-hover:text-accent transition-colors">
+                          {link.name.toUpperCase()}
+                        </span>
+                        <span className="text-[11px] font-mono text-muted mt-0.5 block">
+                          {link.handle}
+                        </span>
+                      </div>
+                      <span className="text-xs font-mono text-muted group-hover:text-foreground group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-transform" aria-hidden="true">
+                        ↗
+                      </span>
+                    </a>
+                  </StaggerItem>
+                ))}
+              </StaggerContainer>
+            </div>
+          )}
+
+          {/* Editorial Footer Colophon */}
+          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 text-[11px] font-mono text-muted pt-12 mt-12 border-t border-border">
+            <span>PANUDET SRIWUTTISAP — DEVELOPER FOLIO</span>
+            <span className="tabular-nums">DESIGNED & ARCHITECTED • 2026</span>
           </div>
         </div>
-      </section>
+      </ScrollReveal>
+      {process.env.NODE_ENV === "development" && (
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var p=new URLSearchParams(location.search);var id=p.get("verify-transition");if(!id)return;var el=document.getElementById(id);if(!el)return;document.documentElement.style.scrollBehavior="auto";scrollTo(0,el.offsetTop-innerHeight*0.5)})()`,
+          }}
+        />
+      )}
     </main>
   );
 }

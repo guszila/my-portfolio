@@ -1,71 +1,92 @@
 import { DeveloperProfile } from "@/types/developer";
 
 export const developerData: DeveloperProfile = {
-  name: "Developer Name",
-  role: "Full Stack Developer",
-  handle: "developer",
-  location: "Remote / Worldwide",
-  status: {
-    indicator: "available",
-    label: "Open to Full Stack & Architecture Roles",
-  },
-  statement:
-    "Building robust web applications, data workflows, and internal developer tools.",
+  name: "PANUDET SRIWUTTISAP",
+  nickname: "FOCUS",
+  role: "Full Stack",
+  education: "Computer Science",
+  university: "Suranaree University of Technology",
+  interest: "Full Stack Development",
+  statement: "PANUDET SRIWUTTISAP",
   substatement:
-    "I focus on engineering reliable systems that eliminate repetitive manual workflows, protect data integrity, and deliver clean, responsive user experiences.",
+    "Computer Science — Suranaree University of Technology. Interested in Full Stack Development.",
   focusAreas: [
     {
-      title: "Web Applications",
-      description: "Responsive, type-safe full stack web applications built with Next.js, React, and TypeScript.",
+      title: "Role",
+      description: "Full Stack",
     },
     {
-      title: "Data Systems",
-      description: "Structured workflows, relational data modeling, and operational dashboards.",
+      title: "Education",
+      description: "Computer Science at Suranaree University of Technology",
     },
     {
-      title: "Developer Tools",
-      description: "Internal tooling and interfaces designed to reduce friction and improve team productivity.",
+      title: "Interest",
+      description: "Full Stack Development",
     },
   ],
   truthfulMetrics: [
     {
-      id: "featured-case-study",
+      id: "featured-project",
       label: "Featured Project",
       value: "Planning System",
-      detail: "Production planning web application with workflow automation and dashboard visualization.",
-      badge: "Flagship",
+      detail: "Production planning web application.",
+      badge: "Project",
     },
     {
-      id: "core-stack",
-      label: "Core Stack",
-      value: "TypeScript & Next.js",
-      detail: "React, Tailwind CSS, Motion, and modern web architecture.",
-      badge: "Modern",
+      id: "role",
+      label: "Role",
+      value: "Full Stack",
+      detail: "Current role description.",
+      badge: "Profile",
     },
     {
-      id: "focus-domain",
-      label: "Specialization",
-      value: "Full Stack & Workflows",
-      detail: "Data visualization, operational dashboards, and high-reliability interfaces.",
-      badge: "Architecture",
+      id: "education",
+      label: "Education",
+      value: "Computer Science",
+      detail: "Suranaree University of Technology.",
+      badge: "Education",
     },
     {
-      id: "project-readiness",
-      label: "Project Status",
-      value: "Case Study Ready",
-      detail: "Deep dive into problem breakdown, architecture, and core modules.",
-      badge: "Explorable",
+      id: "interest",
+      label: "Interest",
+      value: "Full Stack Development",
+      detail: "Current development interest.",
+      badge: "Interest",
     },
   ],
-  primaryProjectTeaser: {
-    id: "planning-system",
-    name: "Planning System",
-    domain: "Production Planning Web Application",
-    status: "Primary Featured Case Study",
-    summary:
-      "Engineered to improve production planning workflows, reduce repetitive manual work, improve data accuracy, and provide clear dashboard visualization.",
-    targetHref: "#projects",
-  },
+  technologyGroups: [
+    {
+      id: "portfolio",
+      label: "BUILT WITH",
+      summary: "Technologies used to build this portfolio website.",
+      technologies: [
+        { name: "Next.js", detail: "Application framework" },
+        { name: "React", detail: "Interface components" },
+        { name: "TypeScript", detail: "Typed source code" },
+        { name: "Tailwind CSS", detail: "Interface styling" },
+        { name: "Motion for React", detail: "Scroll and interface animation" },
+      ],
+    },
+    {
+      id: "personal",
+      label: "PERSONAL SKILL SET",
+      summary: "A complete, verified personal technology list will be added later.",
+      technologies: [],
+    },
+  ],
+  featuredProjects: [
+    {
+      id: "planning-system",
+      name: "Planning System",
+      domain: "Production planning web application",
+      summary:
+        "Developed to improve a production planning workflow that previously relied heavily on Excel formulas and macros.",
+      modules: ["WIP & OUTPUT", "PRODUCTIVITY", "CAPACITY"],
+      technologies: ["React", "Node.js", "PostgreSQL", "REST API"],
+      architecture: ["Frontend", "Backend", "PostgreSQL"],
+      targetHref: "#case-study",
+    },
+  ],
   navigation: [
     {
       id: "nav-home",
@@ -74,10 +95,22 @@ export const developerData: DeveloperProfile = {
       ariaLabel: "Navigate to top / hero section",
     },
     {
+      id: "nav-about",
+      label: "About",
+      href: "#about",
+      ariaLabel: "Navigate to developer story and background",
+    },
+    {
+      id: "nav-skills",
+      label: "Skills",
+      href: "#skills",
+      ariaLabel: "Navigate to technology overview",
+    },
+    {
       id: "nav-projects",
       label: "Projects",
       href: "#projects",
-      ariaLabel: "Navigate to projects section",
+      ariaLabel: "Navigate to featured project",
     },
     {
       id: "nav-architecture",
@@ -86,35 +119,13 @@ export const developerData: DeveloperProfile = {
       ariaLabel: "Navigate to Planning System architecture overview",
     },
     {
-      id: "nav-skills",
-      label: "Skills",
-      href: "#skills",
-      ariaLabel: "Navigate to skills and technologies section",
-    },
-    {
-      id: "nav-about",
-      label: "About",
-      href: "#about",
-      ariaLabel: "Navigate to about section",
+      id: "nav-contact",
+      label: "Contact",
+      href: "#contact",
+      ariaLabel: "Navigate to contact section",
     },
   ],
-  socialLinks: [
-    {
-      name: "GitHub",
-      url: "https://github.com",
-      handle: "github.com/developer",
-    },
-    {
-      name: "LinkedIn",
-      url: "https://linkedin.com",
-      handle: "linkedin.com/in/developer",
-    },
-    {
-      name: "Email",
-      url: "mailto:developer@example.com",
-      handle: "developer@example.com",
-    },
-  ],
+  socialLinks: [],
   systemInfo: {
     environment: "Next.js App Router",
     version: "v1.0.0",
